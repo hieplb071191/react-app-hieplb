@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -7,14 +7,26 @@ import * as moment from 'moment';
 import { httpPostRequest } from '@/api/call-api';
 import { setToken } from '@/redux/slices/token.slice';
 import { setEmail } from '@/redux/slices/signup-google.slice';
+import { DatePicker } from 'antd';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 
 interface IFormValues {
 	email: string;
 	username: string;
 	dob?: Date;
-	address?: string;
 	isTwoFA?: boolean;
+	address?: {};
 }
+
+const containerStyle = {
+	width: '400px',
+	height: '400px',
+};
+
+const center = {
+	lat: 20.893435916325902,
+	lng: 105.7647307871195,
+};
 
 export default function SignUpWithGoogle() {
 	const dispatch = useDispatch();
@@ -26,7 +38,38 @@ export default function SignUpWithGoogle() {
 	if (!email) {
 		router.replace('/');
 	}
+	const [address, setAddress] = useState<any>(null);
 
+	const { isLoaded } = useJsApiLoader({
+		id: 'google-map-script',
+		googleMapsApiKey: process.env.GOOGLE_MAP_KEY as string,
+	});
+
+	const [map, setMap] = useState(null);
+
+	const onUnmount = useCallback(function callback(map: any) {
+		setMap(null);
+	}, []);
+
+	const onLoad = useCallback(function callback(map: any) {
+		// This is just an example of getting and using the map instance!!! don't just blindly copy!
+
+		const bounds = new window.google.maps.LatLngBounds(center);
+		map.fitBounds(bounds);
+		setMap(map);
+	}, []);
+
+	const onchangeMap = (event: google.maps.MapMouseEvent) => {
+		// console.log(event);
+		console.log(event);
+		console.log(event.latLng?.toJSON());
+		console.log(event.latLng?.toUrlValue());
+		setAddress(event.latLng?.toJSON());
+	};
+
+	useEffect(() => {
+		console.log(map);
+	}, [map]);
 	const {
 		register,
 		handleSubmit,
@@ -38,7 +81,6 @@ export default function SignUpWithGoogle() {
 			email: email,
 			username: '',
 			dob: undefined,
-			address: '',
 			isTwoFA: false,
 		},
 		resolver: undefined,
@@ -50,7 +92,8 @@ export default function SignUpWithGoogle() {
 		delayError: undefined,
 	});
 	const onSubmit = async (data: any) => {
-		let { email, username, dob, address, isTwoFA } = data;
+		console.log(data);
+		let { email, username, dob, isTwoFA } = data;
 		if (dob) {
 			dob = new Date(dob).toISOString();
 		}
@@ -100,11 +143,24 @@ export default function SignUpWithGoogle() {
 									type={'date'}
 									className="border-solid border-2 rounded h-10  px-2 w-full"
 								/>
-								<input
-									placeholder="address"
-									{...register('address')}
-									className="border-solid border-2 rounded h-10  px-2 w-full"
-								/>
+
+								{isLoaded ? (
+									<>
+										<GoogleMap
+											mapContainerStyle={containerStyle}
+											center={center}
+											zoom={10}
+											onLoad={onLoad}
+											onUnmount={onUnmount}
+											onClick={onchangeMap}
+										>
+											{/* Child components, such as markers, info windows, etc. */}
+											<></>
+										</GoogleMap>
+									</>
+								) : (
+									<></>
+								)}
 								<div className="flex justify-center gap-x-7">
 									<button type="submit" className="bg-sky-300 w-28 h-10 rounded font-semibold text-slate-100">
 										Submit

@@ -29,13 +29,12 @@ const tokenSlice = createSlice({
 			state.token = action.payload;
 		});
 
-		// builder.addCase(loginWithGoogleThunk.pending, (state, action) => {
-		// 	state.isLoading = true;
-		// });
-		// builder.addCase(loginWithGoogleThunk.fulfilled, (state, action) => {
-		// 	console.log('action', action);
-		// 	state.token = action.payload ? action.payload : '';
-		// });
+		builder.addCase(loginWithGoogleThunk.pending, (state, action) => {
+			state.isLoading = true;
+		});
+		builder.addCase(loginWithGoogleThunk.fulfilled, (state, action) => {
+			state.isLoading = false;
+		});
 	},
 });
 

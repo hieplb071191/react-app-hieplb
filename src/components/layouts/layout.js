@@ -5,7 +5,7 @@ export const Layout = ({ children }) => {
 	return (
 		<>
 			<Navbar />
-			<main>{children}</main>
+			<main style={{ marginBottom: '70px' }}>{children}</main>
 			<Footer />
 		</>
 	);
