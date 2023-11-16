@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { Layout } from '@/components/layouts/layout';
 
 interface IFormValues {
 	email: string;
@@ -12,7 +13,7 @@ interface IFormValues {
 	password: string;
 }
 
-export default function Login() {
+function Login() {
 	const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 	const token = useSelector((state: any) => state.token);
 	const router = useRouter();
@@ -52,40 +53,40 @@ export default function Login() {
 		});
 	};
 	return (
-		<>
-			<div className="px-5 md:px-0">
-				<div className="w-w-full md:w-1/2 m-auto p-3 border-2 rounded-2xl mt-10">
-					<section className="flex justify-center font-bold text-3xl mx-8 my-8">
-						<span>Trang đăng nhập</span>
-					</section>
-					<section className="flex justify-center">
-						<form onSubmit={handleSubmit(onSubmit)} className="flex justify-center w-full">
-							<div className="flex flex-col items-center gap-y-4  w-full">
-								<input
-									placeholder="email"
-									{...register('email', { required: true })}
-									className="border-solid border-2 rounded h-10  px-2 w-full"
-								/>
-								{errors.email && <p className="text-red-600">Email không được để trống</p>}
+		<div className="px-5 md:px-0">
+			<div className="w-w-full md:w-1/2 m-auto p-3 border-2 rounded-2xl mt-10">
+				<section className="flex justify-center font-bold text-3xl mx-8 my-8">
+					<span>Trang đăng nhập</span>
+				</section>
+				<section className="flex justify-center">
+					<form onSubmit={handleSubmit(onSubmit)} className="flex justify-center w-full">
+						<div className="flex flex-col items-center gap-y-4  w-full">
+							<input
+								placeholder="email"
+								{...register('email', { required: true })}
+								className="border-solid border-2 rounded h-10  px-2 w-full"
+							/>
+							{errors.email && <p className="text-red-600">Email không được để trống</p>}
 
-								<input
-									type="password"
-									placeholder="email"
-									{...register('password', { required: true })}
-									className="border-solid border-2 rounded h-10  px-2 w-full"
-								/>
-								{errors.password && <p className="text-red-600">Password không được để trống</p>}
-								<div className="flex justify-center gap-x-7">
-									<button type="submit" className="bg-sky-300 w-28 h-10 rounded font-semibold text-slate-100">
-										Submit
-									</button>
-									<GoogleLogin text={'signin'} size={'large'} onSuccess={onsuccessGoogle} />
-								</div>
+							<input
+								type="password"
+								placeholder="email"
+								{...register('password', { required: true })}
+								className="border-solid border-2 rounded h-10  px-2 w-full"
+							/>
+							{errors.password && <p className="text-red-600">Password không được để trống</p>}
+							<div className="flex justify-center gap-x-7 md:items-center md:gap-y-5 md:flex-col">
+								<button type="submit" className="bg-sky-300 w-28 h-10 rounded font-semibold text-slate-100">
+									Submit
+								</button>
+								<GoogleLogin text={'signin'} size={'large'} onSuccess={onsuccessGoogle} />
 							</div>
-						</form>
-					</section>
-				</div>
+						</div>
+					</form>
+				</section>
 			</div>
-		</>
+		</div>
 	);
 }
+
+export default Login;

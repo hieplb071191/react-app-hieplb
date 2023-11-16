@@ -13,20 +13,16 @@ export const loginThunk = createAsyncThunk('user/login', async (params: any, thu
 });
 
 export const loginWithGoogleThunk = createAsyncThunk('/user/signinWithgoogle', async (params: any, thunkApi) => {
-	try {
-		await httpPostRequest('/auth/signinWithGoogle', params)
-			.then((res) => {
-				if (res && res.data?.access_token) {
-					thunkApi.dispatch(setToken(res.data?.access_token));
-				}
-			})
-			.catch((e) => {
-				if (e.response?.data?.data?.email) {
-					thunkApi.dispatch(setEmail(e.response?.data?.data?.email));
-					window.location.href = '/signup-with-google';
-				}
-			});
-	} catch (e) {
-		return null;
-	}
+	httpPostRequest('/auth/signinWithGoogle', params)
+		.then((res) => {
+			if (res && res.data?.access_token) {
+				thunkApi.dispatch(setToken(res.data?.access_token));
+			}
+		})
+		.catch((e) => {
+			if (e.response?.data?.data?.email) {
+				thunkApi.dispatch(setEmail(e.response?.data?.data?.email));
+				window.location.href = '/signup-with-google';
+			}
+		});
 });
