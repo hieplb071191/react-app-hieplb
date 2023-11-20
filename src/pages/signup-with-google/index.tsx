@@ -111,7 +111,7 @@ export default function SignUpWithGoogle() {
 	return (
 		<>
 			<div className="px-5 md:px-0">
-				<div className="w-w-full md:w-1/2 m-auto p-3 border-2 rounded-2xl mt-10">
+				<div className="w-w-full md:w-1/2 m-auto p-3 border-2 rounded-xxl mt-10">
 					<section className="flex justify-center font-bold text-3xl mx-8 my-8">
 						<span>Đăng ký thông tin google</span>
 					</section>
