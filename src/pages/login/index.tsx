@@ -1,5 +1,5 @@
 import { loginThunk, loginWithGoogleThunk } from '@/redux/thunks/token.thunk';
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import { CredentialResponse, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -47,14 +47,18 @@ function Login() {
 		dispatch(loginThunk(data));
 	};
 
-	const onsuccessGoogle = (params: CredentialResponse) => {
+	const onsuccessGoogle = (params: any) => {
 		dispatch(loginWithGoogleThunk(params)).catch((e) => {
 			console.log(e);
 		});
 	};
+
+	const loginGoogle = useGoogleLogin({
+		onSuccess: (params) => onsuccessGoogle(params),
+	});
 	return (
 		<div className="px-5 md:px-0">
-			<div className="w-w-full md:w-1/2 m-auto p-3 border-2 rounded-2xl mt-10">
+			<div className="w-w-full md:w-1/2 m-auto p-3 border-2 rounded-xxl mt-10">
 				<section className="flex justify-center font-bold text-3xl mx-8 my-8">
 					<span>Trang đăng nhập</span>
 				</section>
@@ -79,7 +83,10 @@ function Login() {
 								<button type="submit" className="bg-sky-300 w-28 h-10 rounded font-semibold text-slate-100">
 									Submit
 								</button>
-								<GoogleLogin text={'signin'} size={'large'} onSuccess={onsuccessGoogle} />
+								{/* <GoogleLogin onSuccess={onsuccessGoogle} /> */}
+								<button type="button" onClick={() => loginGoogle()}>
+									LoginGoogle
+								</button>
 							</div>
 						</div>
 					</form>

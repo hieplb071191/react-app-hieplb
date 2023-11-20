@@ -5,7 +5,9 @@ export const Layout = ({ children }) => {
 	return (
 		<>
 			<Navbar />
-			<main style={{ marginBottom: '70px' }}>{children}</main>
+			<div>
+				<main style={{ marginBottom: '70px', marginTop: '0px' }}>{children}</main>
+			</div>
 			<Footer />
 		</>
 	);
